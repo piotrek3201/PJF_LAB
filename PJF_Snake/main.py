@@ -47,7 +47,6 @@ def main():
 
         #update variables
 
-
         #clear background
         screen.blit(backgroung, (0, 0))
         backgroung.fill((250, 250, 250))
@@ -73,6 +72,7 @@ def main():
         for i in range(len(fields)):
             fields[i].update()
             if fields[i].used:
+                #pygame.draw.rect(backgroung, (255, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
                 pygame.draw.rect(backgroung, (255, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
 
 

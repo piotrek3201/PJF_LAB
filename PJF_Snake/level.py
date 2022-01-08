@@ -8,7 +8,7 @@ class Field:
     def update(self):
         unused = 0
         for i in range(len(self.players)):
-            if self.players[i].active and self.players[i].field_x == self.x and self.players[i].field_y == self.y:
+            if self.players[i].active and self.players[i].x == self.x and self.players[i].y == self.y:
                 self.used = True
             else:
                 unused += 1
