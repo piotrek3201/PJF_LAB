@@ -19,10 +19,9 @@ def main():
 
     fruit = snake.Fruit()
 
-    players = []
-    for i in range(4):
-        players.append(snake.Player())
+    players = [snake.Player(1, 30, 20, 0), snake.Player(2, 30, 21, 2)]
     players[0].active = True
+    players[1].active = True
 
     fields = []
 
@@ -54,24 +53,33 @@ def main():
         #draw level
         game.draw_level(screen,backgroung)
         game.text(text="Długość: " + str(players[0].lenght), x=800, y=10, color=(0, 0, 0), font=font, screen=screen)
+        game.text(text="Długość: " + str(players[1].lenght), x=800, y=30, color=(0, 0, 0), font=font, screen=screen)
 
         if players[0].lost:
-            game.text(text="Porażka!", x=50, y=630, color=(255, 0, 0), font=font, screen=screen)
-            players[0].lenght = 1
+            game.text(text="Porażka gracza 1!", x=50, y=630, color=(255, 0, 0), font=font, screen=screen)
+        if players[1].lost:
+            game.text(text="Porażka gracza 2!", x=50, y=650, color=(255, 0, 0), font=font, screen=screen)
 
         #draw player
         #pygame.draw.rect(backgroung, (50, 255, 255), (players[0].x, players[0].y, 15, 15))
         players[0].update()
+        players[1].update()
 
         for i in range(len(fields)):
             fields[i].update()
             if fields[i].fruit_is_here:
                 pygame.draw.rect(backgroung, (255, 255, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
-            if fields[i].tail_is_here:
-                pygame.draw.rect(backgroung, (200, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
-            if fields[i].player_is_here:
-                pygame.draw.rect(backgroung, (255, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
-
+            for j in range(2):
+                if fields[i].tail_is_here[j]:
+                    if j == 0:
+                        pygame.draw.rect(backgroung, (200, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
+                    if j == 1:
+                        pygame.draw.rect(backgroung, (0, 0, 200), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
+                if fields[i].player_is_here[j]:
+                    if j == 0:
+                        pygame.draw.rect(backgroung, (255, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
+                    if j == 1:
+                        pygame.draw.rect(backgroung, (0, 0, 255), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
 
 
 

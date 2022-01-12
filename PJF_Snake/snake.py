@@ -2,12 +2,13 @@ import pygame
 from random import randint
 
 class Player:
-    def __init__(self):
-        self.x = 30
-        self.y = 20
+    def __init__(self, id, x, y, direction):
+        self.id = id
+        self.x = x
+        self.y = y
         self.previous_x = None
         self.previous_y = None
-        self.direction = 1 # 0 - up, 1 - right, 2 - down, 3 - left
+        self.direction = direction # 0 - up, 1 - right, 2 - down, 3 - left
         self.lost = False
         self.field_x = 2
         self.field_y = 2
@@ -15,6 +16,8 @@ class Player:
         self.lenght = 1
         self.time = pygame.time.Clock().tick(60)
         self.tail = [TailSegment(-1, -1)]
+        self.start_x = x
+        self.start_y = y
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -22,14 +25,7 @@ class Player:
 
         if not self.lost:
 
-            if keys[pygame.K_RIGHT] and self.direction != 3:
-                self.direction = 1
-            elif keys[pygame.K_LEFT] and self.direction != 1:
-                self.direction = 3
-            elif keys[pygame.K_UP] and self.direction != 2:
-                self.direction = 0
-            elif keys[pygame.K_DOWN] and self.direction != 0:
-                self.direction = 2
+            self.turn()
 
             if self.time / 1000.0 > 0.1:
                 self.time = 0
@@ -51,13 +47,12 @@ class Player:
                         self.tail[i].x = self.tail[i - 1].x
                         self.tail[i].y = self.tail[i - 1].y
 
-
-
         else:
+
             if keys[pygame.K_r]:
                 self.lost = False
-                self.x = 30
-                self.y = 20
+                self.x = self.start_x
+                self.y = self.start_y
 
         if self.x >= 52 or self.x < 0 or self.y < 0 or self.y >= 40:
             self.lose()
@@ -65,6 +60,29 @@ class Player:
     def lose(self):
         self.lost = True
         self.tail = [TailSegment(-1, -1)]
+        self.lenght = 1
+
+    def turn(self):
+        keys = pygame.key.get_pressed()
+
+        if self.id == 1:
+            if keys[pygame.K_RIGHT] and self.direction != 3:
+                self.direction = 1
+            elif keys[pygame.K_LEFT] and self.direction != 1:
+                self.direction = 3
+            elif keys[pygame.K_UP] and self.direction != 2:
+                self.direction = 0
+            elif keys[pygame.K_DOWN] and self.direction != 0:
+                self.direction = 2
+        elif self.id == 2:
+            if keys[pygame.K_d] and self.direction != 3:
+                self.direction = 1
+            elif keys[pygame.K_a] and self.direction != 1:
+                self.direction = 3
+            elif keys[pygame.K_w] and self.direction != 2:
+                self.direction = 0
+            elif keys[pygame.K_s] and self.direction != 0:
+                self.direction = 2
 
 
 class TailSegment:
