@@ -51,6 +51,8 @@ class Player:
                         self.tail[i].x = self.tail[i - 1].x
                         self.tail[i].y = self.tail[i - 1].y
 
+
+
         else:
             if keys[pygame.K_r]:
                 self.lost = False
@@ -58,8 +60,11 @@ class Player:
                 self.y = 20
 
         if self.x >= 52 or self.x < 0 or self.y < 0 or self.y >= 40:
-            self.lost = True
-            self.tail = [TailSegment(-1, -1)]
+            self.lose()
+
+    def lose(self):
+        self.lost = True
+        self.tail = [TailSegment(-1, -1)]
 
 
 class TailSegment:
