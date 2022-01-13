@@ -53,6 +53,7 @@ class Player:
                 self.lost = False
                 self.x = self.start_x
                 self.y = self.start_y
+                self.active = True
 
         if self.x >= 52 or self.x < 0 or self.y < 0 or self.y >= 40:
             self.lose()
@@ -61,6 +62,7 @@ class Player:
         self.lost = True
         self.tail = [TailSegment(-1, -1)]
         self.lenght = 1
+        self.active = False
 
     def turn(self):
         keys = pygame.key.get_pressed()

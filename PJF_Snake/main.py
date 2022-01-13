@@ -49,6 +49,8 @@ def main():
                 running = False
 
         #update variables
+        players[0].update()
+        players[1].update()
 
         #draw level
         game.draw_level(screen,backgroung)
@@ -61,9 +63,7 @@ def main():
             game.text(text="Porażka gracza 2!", x=50, y=650, color=(255, 0, 0), font=font, screen=screen)
 
         #draw player
-        #pygame.draw.rect(backgroung, (50, 255, 255), (players[0].x, players[0].y, 15, 15))
-        players[0].update()
-        players[1].update()
+
 
         for i in range(len(fields)):
             fields[i].update()
