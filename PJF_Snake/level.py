@@ -5,14 +5,14 @@ class Field:
         self.x = x
         self.y = y
         self.players = list(players)
-        self.player_is_here = [False, False]
+        self.player_is_here = [False, False, False, False]
         self.fruit = fruit
         self.fruit_is_here = False
-        self.tail_is_here = [False, False]
+        self.tail_is_here = [False, False, False, False]
 
     def update(self):
-        self.tail_is_here = [False, False]
-        self.player_is_here = [False, False]
+        self.tail_is_here = [False, False, False, False]
+        self.player_is_here = [False, False, False, False]
 
         for i in range(len(self.players)):
             #snakes' heads
@@ -38,15 +38,13 @@ class Field:
                         if self.players[i].active and self.players[j].tail[k].x == self.players[i].x and self.players[j].tail[k].y == self.players[i].y:
                             self.players[i].lose()
 
-
-
             #snake eats the fruit
             if self.fruit_is_here and self.player_is_here[i]:
                 self.fruit.eat()
                 self.players[i].lenght += 1
                 self.players[i].tail.append(snake.TailSegment(self.players[i].tail[-1].x, self.players[i].tail[-1].y))
 
-        #spawn a new fruit
+        #fruit
         if self.fruit.x == self.x and self.fruit.y == self.y:
             self.fruit_is_here = True
         else:

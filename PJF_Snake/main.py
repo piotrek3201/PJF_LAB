@@ -7,7 +7,7 @@ import level
 def main():
     #window initialization
     pygame.init()
-    size_x = 900
+    size_x = 980
     size_y = 720
     screen = pygame.display.set_mode((size_x, size_y))
     pygame.display.set_caption('Snake')
@@ -19,9 +19,17 @@ def main():
 
     fruit = snake.Fruit()
 
-    players = [snake.Player(1, 30, 20, 0), snake.Player(2, 30, 21, 2)]
+    players = [snake.Player(1, 30, 20, 0, fruit), snake.Player(2, 30, 21, 2, fruit), snake.Player(3, 31, 20, 1, fruit), snake.Player(4, 29, 21, 3, fruit)]
     players[0].active = True
     players[1].active = True
+    players[1].cpu = True
+    players[2].active = True
+    players[2].cpu = True
+    players[3].active = True
+    players[3].cpu = True
+
+    for i in players:
+        i.other_players = players
 
     fields = []
 
@@ -51,16 +59,24 @@ def main():
         #update variables
         players[0].update()
         players[1].update()
+        players[2].update()
+        players[3].update()
 
         #draw level
         game.draw_level(screen,backgroung)
-        game.text(text="Długość: " + str(players[0].lenght), x=800, y=10, color=(0, 0, 0), font=font, screen=screen)
-        game.text(text="Długość: " + str(players[1].lenght), x=800, y=30, color=(0, 0, 0), font=font, screen=screen)
+        game.text(text="Długość gracza 1: " + str(players[0].lenght), x=800, y=10, color=(0, 0, 0), font=font, screen=screen)
+        game.text(text="Długość gracza 2: " + str(players[1].lenght), x=800, y=30, color=(0, 0, 0), font=font, screen=screen)
+        game.text(text="Długość gracza 3: " + str(players[2].lenght), x=800, y=50, color=(0, 0, 0), font=font, screen=screen)
+        game.text(text="Długość gracza 4: " + str(players[3].lenght), x=800, y=70, color=(0, 0, 0), font=font, screen=screen)
 
         if players[0].lost:
             game.text(text="Porażka gracza 1!", x=50, y=630, color=(255, 0, 0), font=font, screen=screen)
         if players[1].lost:
             game.text(text="Porażka gracza 2!", x=50, y=650, color=(255, 0, 0), font=font, screen=screen)
+        if players[2].lost:
+            game.text(text="Porażka gracza 3!", x=50, y=670, color=(255, 0, 0), font=font, screen=screen)
+        if players[3].lost:
+            game.text(text="Porażka gracza 4!", x=50, y=690, color=(255, 0, 0), font=font, screen=screen)
 
         #draw player
 
@@ -69,17 +85,25 @@ def main():
             fields[i].update()
             if fields[i].fruit_is_here:
                 pygame.draw.rect(backgroung, (255, 255, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
-            for j in range(2):
+            for j in range(4):
                 if fields[i].tail_is_here[j]:
                     if j == 0:
                         pygame.draw.rect(backgroung, (200, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
                     if j == 1:
                         pygame.draw.rect(backgroung, (0, 0, 200), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
+                    if j == 2:
+                        pygame.draw.rect(backgroung, (0, 200, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
+                    if j == 3:
+                        pygame.draw.rect(backgroung, (0, 200, 200), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
                 if fields[i].player_is_here[j]:
                     if j == 0:
                         pygame.draw.rect(backgroung, (255, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
                     if j == 1:
                         pygame.draw.rect(backgroung, (0, 0, 255), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
+                    if j == 2:
+                        pygame.draw.rect(backgroung, (0, 255, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
+                    if j == 3:
+                        pygame.draw.rect(backgroung, (0, 255, 255), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
 
 
 
