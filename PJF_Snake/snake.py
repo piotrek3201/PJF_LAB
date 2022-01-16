@@ -19,8 +19,7 @@ class Player:
         self.cpu = False
         self.fruit = fruit
         self.other_players = None
-        self.others_x = []
-        self.others_y = []
+        self.others = []
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -31,7 +30,7 @@ class Player:
             if not self.cpu:
                 self.turn()
 
-            if self.time / 1000.0 > 0.01:
+            if self.time / 1000.0 > 0.04:
 
                 if self.cpu:
                     self.cpu_turn()
@@ -101,53 +100,96 @@ class Player:
         fruit_x = self.fruit.x
         fruit_y = self.fruit.y
 
-        self.others_x = []
-        self.others_y = []
+        self.others = []
 
         pr_dir = self.direction
 
-        # 0 - up, 1 - right, 2 - down, 3 - left
+        # collision detection with other snakes
 
-        if fruit_x > self.x and pr_dir != 3:
-            self.direction = 1
-        elif fruit_x < self.x and pr_dir != 1:
-            self.direction = 3
-        elif fruit_y < self.y and pr_dir != 2:
-            self.direction = 0
-        elif fruit_y > self.y and pr_dir != 0:
-            self.direction = 2
-
-        #collision detection with other snakes
         for i in self.other_players:
             if i.active:
                 if i.id != self.id:
-                    self.others_x.append(i.x)
-                    self.others_y.append(i.y)
+                    self.others.append((i.x, i.y))
                 for j in i.tail:
-                    self.others_x.append(j.x)
-                    self.others_y.append(j.y)
+                    self.others.append((j.x, j.y))
 
-        if self.x + 1 in self.others_x and self.y - 1 in self.others_y and self.y + 1 not in self.others_y and pr_dir == 1 and pr_dir != 0:
-            self.direction = 2
-        if self.x + 1 in self.others_x and self.y + 1 in self.others_y and self.y - 1 not in self.others_y and pr_dir == 1 and pr_dir != 2:
-            self.direction = 0
-        if self.x - 1 in self.others_x and self.y - 1 in self.others_y and self.y + 1 not in self.others_y and pr_dir == 3 and pr_dir != 0:
-            self.direction = 2
-        if self.x - 1 in self.others_x and self.y + 1 in self.others_y and self.y - 1 not in self.others_y and pr_dir == 3 and pr_dir != 2:
-            self.direction = 0
-        if self.y + 1 in self.others_y and self.x - 1 in self.others_x and self.x + 1 not in self.others_x and pr_dir == 2 and pr_dir != 3:
+
+        # 0 - up, 1 - right, 2 - down, 3 - left
+
+        if fruit_x > self.x and pr_dir != 3 and (self.x+1, self.y) not in self.others:
             self.direction = 1
-        if self.y + 1 in self.others_y and self.x + 1 in self.others_x and self.x - 1 not in self.others_x and pr_dir == 2 and pr_dir != 1:
+            print(91)
+        elif fruit_x < self.x and pr_dir != 1 and (self.x-1, self.y) not in self.others:
             self.direction = 3
-        if self.y - 1 in self.others_y and self.x - 1 in self.others_x and self.x + 1 not in self.others_x and pr_dir == 0 and pr_dir != 3:
+            print(92)
+        elif fruit_y < self.y and pr_dir != 2 and (self.x, self.y-1) not in self.others:
+            self.direction = 0
+            print(93)
+        elif fruit_y > self.y and pr_dir != 0 and (self.x, self.y+1) not in self.others:
+            self.direction = 2
+            print(94)
+        elif fruit_x == self.x and fruit_y < self.y and self.direction == 2 and self.x < 51:
             self.direction = 1
-        if self.y - 1 in self.others_y and self.x + 1 in self.others_x and self.x - 1 not in self.others_x and pr_dir == 0 and pr_dir != 1:
+            print(5)
+        elif fruit_x == self.x and fruit_y < self.y and self.direction == 2 and self.x > 1:
             self.direction = 3
+            print(6)
+        elif fruit_y == self.y and fruit_x < self.x and self.direction == 3 and self.y < 39:
+            self.direction = 0
+            print(7)
+        elif fruit_y == self.y and fruit_x < self.x and self.direction == 3 and self.x > 1:
+            self.direction = 2
+            print(8)
+        elif fruit_x == self.x and fruit_y > self.y and self.direction == 0 and self.x < 51:
+            self.direction = 1
+            print(9)
+        elif fruit_x == self.x and fruit_y > self.y and self.direction == 0 and self.x > 1:
+            self.direction = 3
+            print(10)
+        elif fruit_y == self.y and fruit_x > self.x and self.direction == 1 and self.y < 39:
+            self.direction = 0
+            print(11)
+        elif fruit_y == self.y and fruit_x > self.x and self.direction == 1 and self.x > 1:
+            self.direction = 2
+            print(12)
 
 
 
 
+        print(self.id)
+        print(self.others)
+        print(str(self.x) + "," + str(self.y))
+        print(self.direction)
 
+
+        # 0 - up, 1 - right, 2 - down, 3 - left
+        if pr_dir == 1 and (self.x + 1, self.y) in self.others and (self.x, self.y-1) not in self.others and self.y > 1:
+            self.direction = 0
+            print(31)
+        elif pr_dir == 1 and (self.x + 1, self.y) in self.others and (self.x, self.y+1) not in self.others and self.y < 39:
+            self.direction = 2
+            print(32)
+        elif pr_dir == 3 and (self.x - 1, self.y) in self.others and (self.x, self.y-1) not in self.others and self.y > 1:
+            self.direction = 0
+            print(33)
+        elif pr_dir == 3 and (self.x - 1, self.y) in self.others and (self.x, self.y+1) not in self.others and self.y < 39:
+            self.direction = 2
+            print(34)
+        elif pr_dir == 2 and (self.x, self.y + 1) in self.others and (self.x - 1, self.y) not in self.others and self.x > 1:
+            self.direction = 3
+            print(35)
+        elif pr_dir == 2 and (self.x, self.y + 1) in self.others and (self.x + 1, self.y) not in self.others and self.x < 39:
+            self.direction = 1
+            print(36)
+        elif pr_dir == 0 and (self.x, self.y - 1) in self.others and (self.x - 1, self.y) not in self.others and self.x > 1:
+            self.direction = 3
+            print(37)
+        elif pr_dir == 0 and (self.x, self.y - 1) in self.others and (self.x + 1, self.y) not in self.others and self.x < 39:
+            self.direction = 1
+            print(38)
+
+        print(self.direction)
+        print("\n")
 
 
 class TailSegment:
