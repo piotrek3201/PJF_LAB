@@ -5,14 +5,14 @@ class Field:
         self.x = x
         self.y = y
         self.players = list(players)
-        self.player_is_here = [False, False, False, False]
+        self.player_is_here = [False, False]
         self.fruit = fruit
         self.fruit_is_here = False
-        self.tail_is_here = [False, False, False, False]
+        self.tail_is_here = [False, False]
 
     def update(self):
-        self.tail_is_here = [False, False, False, False]
-        self.player_is_here = [False, False, False, False]
+        self.tail_is_here = [False, False]
+        self.player_is_here = [False, False]
 
         for i in range(len(self.players)):
             #snakes' heads

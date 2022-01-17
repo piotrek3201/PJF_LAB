@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import snake
 import game
+from button import Button
 import level
 
 def main():
@@ -14,19 +15,16 @@ def main():
 
     #variables initialization
     running = True
-    paused = False
-    clock = pygame.time.Clock()
+    paused = True
     font = pygame.font.SysFont(name="Calibri", size=20 , bold=True, italic=False)
-
-    x = font.size("Start")
-    print(x)
 
     fruit = snake.Fruit()
 
     players = [snake.Player(1, 30, 20, 0, fruit), snake.Player(2, 30, 21, 2, fruit)]
-    players[0].active = True
-    players[1].active = True
-    players[1].cpu = True
+
+    game_mode = 0
+    player1_result = 0
+    player2_result = 0
 
     for i in players:
         i.other_players = players
@@ -37,12 +35,13 @@ def main():
         for j in range(40):
             fields.append(level.Field(i, j, players, fruit))
 
-    button_start = game.Button("Start", 830, 500, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.3, 0)
-    button_restart = game.Button("Restart", 830, 550, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 2.8, 0)
-    button_pause = game.Button("Pauza", 830, 600, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font,screen, 1.9, 0)
+    button_restart = Button("Start", 830, 540, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.3, 0)
+    button_pause = Button("Pauza", 830, 580, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font,screen, 1.9, 0)
 
-    button_player1 = game.Button("Strzałki", 830, 120, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen,3, 2)
-    button_player2 = game.Button("CPU", 830, 180, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.1, 2)
+    button_player1 = Button("Strzałki", 830, 120, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen,3, 2)
+    button_player2 = Button("CPU", 830, 180, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.1, 2)
+
+    button_mode = Button("Ostatni żywy", 810, 320, 150, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 5, 1)
 
     #screen initialization
     backgroung = pygame.Surface(screen.get_size())
@@ -66,6 +65,11 @@ def main():
             players[1].update()
 
         if button_restart.on_click:
+            button_restart.text = "Restart"
+            button_restart.gap = 2.8
+
+            game_mode = button_mode.state
+
             if button_player1.state == 0:
                 players[0].active = True
                 players[0].cpu = False
@@ -90,6 +94,8 @@ def main():
                 if i.active:
                     i.lose()
                     i.restart()
+
+            paused = False
         if button_pause.on_click:
             if paused:
                 paused = False
@@ -102,14 +108,34 @@ def main():
         game.text(text="Długość gracza 2: " + str(players[1].lenght), x=800, y=30, color=(0, 0, 0), font=font, screen=screen)
         game.text(text="Gracz 1", x=850, y=100, color=(255, 0, 0), font=font, screen=screen)
         game.text(text="Gracz 2", x=850, y=160, color=(0, 0, 255), font=font, screen=screen)
+        game.text(text="Tryb gry", x=850, y=300, color=(0, 0, 0), font=font, screen=screen)
+
 
         if players[0].lost:
-            game.text(text="Porażka gracza 1!", x=50, y=630, color=(255, 0, 0), font=font, screen=screen)
+            game.text(text="Śmierć gracza 1!", x=50, y=630, color=(255, 0, 0), font=font, screen=screen)
+            if game_mode == 0:
+                game.text(text="Wygrywa gracz 2!", x=400, y=630, color=(0, 255, 0), font=font, screen=screen)
+                paused = True
+            if game_mode == 1:
+                player1_result = players[0].lenght
         if players[1].lost:
-            game.text(text="Porażka gracza 2!", x=50, y=650, color=(255, 0, 0), font=font, screen=screen)
+            game.text(text="Śmierć gracza 2!", x=50, y=650, color=(255, 0, 0), font=font, screen=screen)
+            if game_mode == 0:
+                game.text(text="Wygrywa gracz 1!", x=400, y=630, color=(0, 255, 0), font=font, screen=screen)
+                paused = True
+            if game_mode == 1:
+                player2_result = players[1].lenght
+
+        if game_mode == 1 and players[0].lost and players[1].lost:
+            paused = True
+            if player1_result > player2_result:
+                game.text(text="Wygrywa gracz 1! Długość: " + str(player1_result), x=400, y=630, color=(0, 255, 0), font=font, screen=screen)
+            elif player2_result > player1_result:
+                game.text(text="Wygrywa gracz 2! Długość: " + str(player2_result), x=400, y=630, color=(0, 255, 0), font=font, screen=screen)
+            else:
+                game.text(text="Remis! Długość obydwu węży: " + str(player1_result), x=400, y=630, color=(255, 200, 0), font=font, screen=screen)
 
         #draw player
-
 
         for i in range(len(fields)):
             fields[i].update()
@@ -135,10 +161,9 @@ def main():
                     if j == 3:
                         pygame.draw.rect(backgroung, (0, 255, 255), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
 
-
-        button_start.draw()
         button_restart.draw()
         button_pause.draw()
+        button_mode.draw()
 
         if button_player1.state == 0:
             button_player1.text = "Strzałki"
@@ -162,9 +187,15 @@ def main():
             button_player2.gap = 1.2
         button_player2.draw()
 
+        if button_mode.state == 0:
+            button_mode.text = "Ostatni żywy"
+            button_mode.gap = 5
+        elif button_mode.state == 1:
+            button_mode.text = "Najdłuższy wąż"
+            button_mode.gap = 10
+
         pygame.display.flip()
         pygame.event.pump()
-        #clock.tick(60)
 
     pygame.quit()
 
