@@ -30,7 +30,7 @@ class Player:
             if not self.cpu:
                 self.turn()
 
-            if self.time / 1000.0 > 0.01:
+            if self.time / 1000.0 > 0.03:
 
                 if self.cpu:
                     self.cpu_turn()

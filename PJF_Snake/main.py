@@ -23,17 +23,10 @@ def main():
 
     fruit = snake.Fruit()
 
-    players = [snake.Player(1, 30, 20, 0, fruit), snake.Player(2, 30, 21, 2, fruit), snake.Player(3, 31, 20, 1, fruit), snake.Player(4, 29, 21, 3, fruit)]
-    #players = [snake.Player(1, 30, 20, 0, fruit), snake.Player(2, 30, 21, 2, fruit)]
+    players = [snake.Player(1, 30, 20, 0, fruit), snake.Player(2, 30, 21, 2, fruit)]
     players[0].active = True
     players[1].active = True
     players[1].cpu = True
-    players[2].active = True
-    players[2].cpu = True
-    players[3].active = True
-    players[3].cpu = True
-
-    #players[0].cpu = True
 
     for i in players:
         i.other_players = players
@@ -44,9 +37,12 @@ def main():
         for j in range(40):
             fields.append(level.Field(i, j, players, fruit))
 
-    button_start = game.Button("Start", 830, 500, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.3)
-    button_restart = game.Button("Restart", 830, 550, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 2.8)
-    button_pause = game.Button("Pauza", 830, 600, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font,screen, 1.9)
+    button_start = game.Button("Start", 830, 500, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.3, 0)
+    button_restart = game.Button("Restart", 830, 550, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 2.8, 0)
+    button_pause = game.Button("Pauza", 830, 600, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font,screen, 1.9, 0)
+
+    button_player1 = game.Button("Strzałki", 830, 120, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen,3, 2)
+    button_player2 = game.Button("CPU", 830, 180, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.1, 2)
 
     #screen initialization
     backgroung = pygame.Surface(screen.get_size())
@@ -56,7 +52,6 @@ def main():
     screen.blit(backgroung, (0, 0))
     pygame.display.flip()
 
-    #pygame.draw.circle(backgroung, (255, 0, 0), (50, 50), 20)
     pygame.draw.lines(backgroung, (0, 0, 0), True, [(10, 10),(790, 10), (790, 590), (10, 590)], 1)
 
 
@@ -69,13 +64,32 @@ def main():
         if not paused:
             players[0].update()
             players[1].update()
-            players[2].update()
-            players[3].update()
 
         if button_restart.on_click:
+            if button_player1.state == 0:
+                players[0].active = True
+                players[0].cpu = False
+            elif button_player1.state == 1:
+                players[0].active = True
+                players[0].cpu = True
+            elif button_player1.state == 2:
+                players[0].active = False
+                players[0].cpu = False
+
+            if button_player2.state == 0:
+                players[1].active = True
+                players[1].cpu = True
+            elif button_player2.state == 1:
+                players[1].active = True
+                players[1].cpu = False
+            elif button_player2.state == 2:
+                players[1].active = False
+                players[1].cpu = False
+
             for i in players:
-                i.lose()
-                i.restart()
+                if i.active:
+                    i.lose()
+                    i.restart()
         if button_pause.on_click:
             if paused:
                 paused = False
@@ -86,17 +100,13 @@ def main():
         game.draw_level(screen,backgroung)
         game.text(text="Długość gracza 1: " + str(players[0].lenght), x=800, y=10, color=(0, 0, 0), font=font, screen=screen)
         game.text(text="Długość gracza 2: " + str(players[1].lenght), x=800, y=30, color=(0, 0, 0), font=font, screen=screen)
-        game.text(text="Długość gracza 3: " + str(players[2].lenght), x=800, y=50, color=(0, 0, 0), font=font, screen=screen)
-        game.text(text="Długość gracza 4: " + str(players[3].lenght), x=800, y=70, color=(0, 0, 0), font=font, screen=screen)
+        game.text(text="Gracz 1", x=850, y=100, color=(255, 0, 0), font=font, screen=screen)
+        game.text(text="Gracz 2", x=850, y=160, color=(0, 0, 255), font=font, screen=screen)
 
         if players[0].lost:
             game.text(text="Porażka gracza 1!", x=50, y=630, color=(255, 0, 0), font=font, screen=screen)
         if players[1].lost:
             game.text(text="Porażka gracza 2!", x=50, y=650, color=(255, 0, 0), font=font, screen=screen)
-        if players[2].lost:
-            game.text(text="Porażka gracza 3!", x=50, y=670, color=(255, 0, 0), font=font, screen=screen)
-        if players[3].lost:
-            game.text(text="Porażka gracza 4!", x=50, y=690, color=(255, 0, 0), font=font, screen=screen)
 
         #draw player
 
@@ -105,7 +115,7 @@ def main():
             fields[i].update()
             if fields[i].fruit_is_here:
                 pygame.draw.rect(backgroung, (255, 255, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
-            for j in range(4):
+            for j in range(2):
                 if fields[i].tail_is_here[j]:
                     if j == 0:
                         pygame.draw.rect(backgroung, (200, 0, 0), (fields[i].x * 15 + 10, fields[i].y * 15 + 10, 15, 15))
@@ -130,9 +140,31 @@ def main():
         button_restart.draw()
         button_pause.draw()
 
+        if button_player1.state == 0:
+            button_player1.text = "Strzałki"
+            button_player1.gap = 3
+        elif button_player1.state == 1:
+            button_player1.text = "CPU"
+            button_player1.gap = 1.1
+        else:
+            button_player1.text = "Brak"
+            button_player1.gap = 1.2
+        button_player1.draw()
+
+        if button_player2.state == 0:
+            button_player2.text = "CPU"
+            button_player2.gap = 1.1
+        elif button_player2.state == 1:
+            button_player2.text = "WASD"
+            button_player2.gap = 2.2
+        else:
+            button_player2.text = "Brak"
+            button_player2.gap = 1.2
+        button_player2.draw()
+
         pygame.display.flip()
         pygame.event.pump()
-        clock.tick(60)
+        #clock.tick(60)
 
     pygame.quit()
 
