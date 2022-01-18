@@ -38,8 +38,8 @@ def main():
     button_player2 = Button("CPU", 830, 180, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.1, 2)
 
     button_mode = Button("Ostatni żywy", 810, 320, 150, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 5, 2)
-    button_increase = Button("+", 880, 355, 30, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 0.85, 0)
-    button_decrease = Button("-", 840, 355, 30, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 0.45, 0)
+    button_increase = Button("+", 885, 355, 30, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 0.85, 0)
+    button_decrease = Button("-", 845, 355, 30, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 0.45, 0)
 
     #screen initialization
     background = pygame.Surface(screen.get_size())
