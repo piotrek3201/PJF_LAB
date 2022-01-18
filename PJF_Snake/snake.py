@@ -1,6 +1,13 @@
 import pygame
 from random import randint
 
+def random_direction(d1, d2):
+    rand = randint(0, 1)
+    if rand == 0:
+        return d1
+    else:
+        return d2
+
 class Player:
     def __init__(self, id, x, y, direction, fruit):
         self.id = id
@@ -127,39 +134,32 @@ class Player:
             self.direction = 0
         elif fruit_y > self.y and pr_dir != 0 and (self.x, self.y+1) not in self.others:
             self.direction = 2
-        elif fruit_x == self.x and fruit_y < self.y and self.direction == 2 and self.x < 51:
-            self.direction = 1
-        elif fruit_x == self.x and fruit_y < self.y and self.direction == 2 and self.x > 1:
-            self.direction = 3
-        elif fruit_y == self.y and fruit_x < self.x and self.direction == 3 and self.y < 39:
-            self.direction = 0
-        elif fruit_y == self.y and fruit_x < self.x and self.direction == 3 and self.x > 1:
-            self.direction = 2
-        elif fruit_x == self.x and fruit_y > self.y and self.direction == 0 and self.x < 51:
-            self.direction = 1
-        elif fruit_x == self.x and fruit_y > self.y and self.direction == 0 and self.x > 1:
-            self.direction = 3
-        elif fruit_y == self.y and fruit_x > self.x and self.direction == 1 and self.y < 39:
-            self.direction = 0
-        elif fruit_y == self.y and fruit_x > self.x and self.direction == 1 and self.x > 1:
-            self.direction = 2
+
+        if fruit_x == self.x and fruit_y < self.y and pr_dir == 2 and 0 < self.x < 51:
+            self.direction = random_direction(1, 3)
+        elif fruit_y == self.y and fruit_x < self.x and pr_dir == 3 and 0 < self.y < 39:
+            self.direction = random_direction(0, 2)
+        elif fruit_x == self.x and fruit_y > self.y and pr_dir == 0 and 0 < self.x < 51:
+            self.direction = random_direction(1, 3)
+        elif fruit_y == self.y and fruit_x > self.x and pr_dir == 1 and 0 < self.y < 39:
+            self.direction = random_direction(0, 2)
 
         # 0 - up, 1 - right, 2 - down, 3 - left
-        if pr_dir == 1 and (self.x + 1, self.y) in self.others and (self.x, self.y-1) not in self.others and self.y > 1:
+        if pr_dir == 1 and (self.x + 1, self.y) in self.others and (self.x, self.y-1) not in self.others and self.y > 0:
             self.direction = 0
         elif pr_dir == 1 and (self.x + 1, self.y) in self.others and (self.x, self.y+1) not in self.others and self.y < 39:
             self.direction = 2
-        elif pr_dir == 3 and (self.x - 1, self.y) in self.others and (self.x, self.y-1) not in self.others and self.y > 1:
+        elif pr_dir == 3 and (self.x - 1, self.y) in self.others and (self.x, self.y-1) not in self.others and self.y > 0:
             self.direction = 0
         elif pr_dir == 3 and (self.x - 1, self.y) in self.others and (self.x, self.y+1) not in self.others and self.y < 39:
             self.direction = 2
-        elif pr_dir == 2 and (self.x, self.y + 1) in self.others and (self.x - 1, self.y) not in self.others and self.x > 1:
+        elif pr_dir == 2 and (self.x, self.y + 1) in self.others and (self.x - 1, self.y) not in self.others and self.x > 0:
             self.direction = 3
-        elif pr_dir == 2 and (self.x, self.y + 1) in self.others and (self.x + 1, self.y) not in self.others and self.x < 39:
+        elif pr_dir == 2 and (self.x, self.y + 1) in self.others and (self.x + 1, self.y) not in self.others and self.x < 51:
             self.direction = 1
-        elif pr_dir == 0 and (self.x, self.y - 1) in self.others and (self.x - 1, self.y) not in self.others and self.x > 1:
+        elif pr_dir == 0 and (self.x, self.y - 1) in self.others and (self.x - 1, self.y) not in self.others and self.x > 0:
             self.direction = 3
-        elif pr_dir == 0 and (self.x, self.y - 1) in self.others and (self.x + 1, self.y) not in self.others and self.x < 39:
+        elif pr_dir == 0 and (self.x, self.y - 1) in self.others and (self.x + 1, self.y) not in self.others and self.x < 51:
             self.direction = 1
 
 

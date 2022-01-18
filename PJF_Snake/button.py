@@ -1,5 +1,5 @@
 import pygame
-from game import text
+from GUI import text
 
 class Button:
     def __init__(self, text, x, y, width, height, button_color, button_color_hover, font_color, font, screen, gap, max_state):
