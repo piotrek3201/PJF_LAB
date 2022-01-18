@@ -1,3 +1,4 @@
+#Piotr Kałuziński WCY19IJ1S1
 import pygame
 from random import randint
 
@@ -18,7 +19,7 @@ class Player:
         self.field_x = 2
         self.field_y = 2
         self.active = False
-        self.lenght = 1
+        self.length = 1
         self.time = pygame.time.Clock().tick(60)
         self.tail = [TailSegment(-1, -1)]
         self.start_x = x
@@ -81,7 +82,7 @@ class Player:
         self.x = self.start_x
         self.y = self.start_y
         self.active = True
-        self.lenght = 1
+        self.length = 1
 
     def turn(self):
 
@@ -170,8 +171,10 @@ class TailSegment:
 
 class Fruit:
     def __init__(self):
-        self.x = randint(0, 51)
-        self.y = randint(0, 39)
+        #self.x = randint(0, 51)
+        #self.y = randint(0, 39)
+        self.x = None
+        self.y = None
 
     def eat(self):
         self.x = randint(0, 51)

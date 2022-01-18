@@ -1,3 +1,4 @@
+#Piotr Kałuziński WCY19IJ1S1
 import pygame
 from GUI import text
 
@@ -43,5 +44,7 @@ class Button:
                 self.time = 0
                 self.on_click = True
                 self.state += 1
+            else:
+                self.on_click = False
         else:
             self.on_click = False

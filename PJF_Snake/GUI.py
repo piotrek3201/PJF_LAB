@@ -1,3 +1,4 @@
+#Piotr Kałuziński WCY19IJ1S1
 import pygame
 
 def text(text, x, y, color, font, screen):

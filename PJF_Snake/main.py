@@ -1,14 +1,13 @@
+#Piotr Kałuziński WCY19IJ1S1
 import pygame
 from pygame.locals import *
 import snake
 from game import Game
 from button import Button
 import level
-import GUI
 
 def main():
     #window initialization
-    #"""
     pygame.init()
     size_x = 980
     size_y = 720
@@ -39,6 +38,8 @@ def main():
     button_player2 = Button("CPU", 830, 180, 100, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 1.1, 2)
 
     button_mode = Button("Ostatni żywy", 810, 320, 150, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 5, 2)
+    button_increase = Button("+", 880, 355, 30, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 0.85, 0)
+    button_decrease = Button("-", 840, 355, 30, 30, (200, 200, 200), (255, 255, 200), (0, 0, 0), font, screen, 0.45, 0)
 
     #screen initialization
     background = pygame.Surface(screen.get_size())
@@ -48,10 +49,7 @@ def main():
     screen.blit(background, (0, 0))
     pygame.display.flip()
 
-    pygame.draw.lines(background, (0, 0, 0), True, [(10, 10),(790, 10), (790, 590), (10, 590)], 1)
-
-    game = Game(players, fields, fruit, background, screen, button_restart, button_pause, button_player1, button_player2, button_mode, font)
-
+    game = Game(players, fields, fruit, background, screen, button_restart, button_pause, button_player1, button_player2, button_mode, button_increase, button_decrease,font)
 
     while running:    #main game loop
         for event in pygame.event.get():

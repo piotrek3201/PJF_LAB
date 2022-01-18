@@ -1,3 +1,4 @@
+#Piotr Kałuziński WCY19IJ1S1
 import snake
 
 class Field:
@@ -25,7 +26,7 @@ class Field:
                     self.tail_is_here[i] = True
 
             #collision with own tail
-            if self.player_is_here[i] and self.tail_is_here[i] and self.players[i].lenght > 2:
+            if self.player_is_here[i] and self.tail_is_here[i] and self.players[i].length > 2:
                 self.players[i].lose()
 
             #collision with other snakes
@@ -41,7 +42,7 @@ class Field:
             #snake eats the fruit
             if self.fruit_is_here and self.player_is_here[i]:
                 self.fruit.eat()
-                self.players[i].lenght += 1
+                self.players[i].length += 1
                 self.players[i].tail.append(snake.TailSegment(self.players[i].tail[-1].x, self.players[i].tail[-1].y))
 
         #fruit
