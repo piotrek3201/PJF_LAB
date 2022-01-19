@@ -71,6 +71,7 @@ class Game:
                     i.restart()
 
             self.paused = False
+
         if self.button_pause.on_click:
             if self.paused:
                 self.paused = False
