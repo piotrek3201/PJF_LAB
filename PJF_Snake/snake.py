@@ -28,6 +28,7 @@ class Player:
         self.fruit = fruit
         self.other_players = None
         self.others = []
+        self.to_be_active = False
 
     def update(self):
         keys = pygame.key.get_pressed()

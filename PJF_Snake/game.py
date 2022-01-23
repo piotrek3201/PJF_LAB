@@ -43,31 +43,39 @@ class Game:
             self.button_restart.gap = 2.8
             self.fruit.eat()
 
+            for i in self.players:
+                i.lose()
+
             self.game_mode = self.button_mode.state
 
             if self.button_player1.state == 0:
                 self.players[0].active = True
                 self.players[0].cpu = False
+                self.players[0].to_be_active = True
             elif self.button_player1.state == 1:
                 self.players[0].active = True
                 self.players[0].cpu = True
+                self.players[0].to_be_active = True
             elif self.button_player1.state == 2:
                 self.players[0].active = False
                 self.players[0].cpu = False
+                self.players[0].to_be_active = False
 
             if self.button_player2.state == 0:
                 self.players[1].active = True
                 self.players[1].cpu = True
+                self.players[1].to_be_active = True
             elif self.button_player2.state == 1:
                 self.players[1].active = True
                 self.players[1].cpu = False
+                self.players[1].to_be_active = True
             elif self.button_player2.state == 2:
                 self.players[1].active = False
                 self.players[1].cpu = False
+                self.players[1].to_be_active = False
 
             for i in self.players:
                 if i.active:
-                    i.lose()
                     i.restart()
 
             self.paused = False
@@ -96,14 +104,14 @@ class Game:
         GUI.text(text="Tryb gry", x=850, y=300, color=(0, 0, 0), font=self.font, screen=self.screen)
 
     def check_win_conditions(self):
-        if self.players[0].lost:
+        if self.players[0].lost and self.players[0].to_be_active:
             GUI.text(text="Śmierć gracza 1!", x=50, y=630, color=(255, 0, 0), font=self.font, screen=self.screen)
             if self.game_mode == 0:
                 GUI.text(text="Wygrywa gracz 2!", x=400, y=630, color=(0, 255, 0), font=self.font, screen=self.screen)
                 self.paused = True
             if self.game_mode == 1 or self.game_mode == 2:
                 self.player1_result = self.players[0].length
-        if self.players[1].lost:
+        if self.players[1].lost and self.players[1].to_be_active:
             GUI.text(text="Śmierć gracza 2!", x=50, y=650, color=(255, 0, 0), font=self.font, screen=self.screen)
             if self.game_mode == 0:
                 GUI.text(text="Wygrywa gracz 1!", x=400, y=630, color=(0, 255, 0), font=self.font, screen=self.screen)
